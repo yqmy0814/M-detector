@@ -21,7 +21,7 @@
 
 // #define POINT_NOISE
 
-typedef pcl::PointXYZINormal PointType;
+typedef pcl::PointXYZI PointType;
 using namespace std;
 
 

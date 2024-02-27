@@ -38,8 +38,8 @@ get_filename_component(_tbb_root "${CMAKE_CURRENT_LIST_FILE}" PATH)
 get_filename_component(_tbb_root "${_tbb_root}" PATH)
 
 foreach (_tbb_component ${TBB_FIND_COMPONENTS})
-    set(_tbb_release_lib "/home/robot/localization_3d_ws/build/lio_slam/tbb_cmake_build/tbb_cmake_build_subdir_release/lib${_tbb_component}.so.2")
-    set(_tbb_debug_lib "/home/robot/localization_3d_ws/build/lio_slam/tbb_cmake_build/tbb_cmake_build_subdir_debug/lib${_tbb_component}_debug.so.2")
+    set(_tbb_release_lib "/home/robot/ROS/m_ws/build/M-detector/tbb_cmake_build/tbb_cmake_build_subdir_release/lib${_tbb_component}.so.2")
+    set(_tbb_debug_lib "/home/robot/ROS/m_ws/build/M-detector/tbb_cmake_build/tbb_cmake_build_subdir_debug/lib${_tbb_component}_debug.so.2")
 
     if (EXISTS "${_tbb_release_lib}" OR EXISTS "${_tbb_debug_lib}")
         add_library(TBB::${_tbb_component} SHARED IMPORTED)

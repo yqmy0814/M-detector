@@ -29,10 +29,10 @@
 
 using namespace std;
 
-typedef pcl::PointXYZINormal PointType;
+typedef pcl::PointXYZI PointType;
 typedef pcl::PointCloud<PointType> PointCloudXYZI;
 
-pcl::PointCloud<pcl::PointXYZINormal> lastcloud;
+pcl::PointCloud<pcl::PointXYZI> lastcloud;
 PointCloudXYZI::Ptr last_pc(new PointCloudXYZI());
 ros::Publisher pub_pointcloud, pub_marker, pub_iou_view;
 

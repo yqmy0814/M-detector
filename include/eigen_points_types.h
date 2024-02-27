@@ -7,7 +7,7 @@
 
 
 
-typedef pcl::PointXYZINormal PointType;
+typedef pcl::PointXYZI PointType;
 typedef pcl::PointCloud<PointType> PointCloudXYZI;
 typedef std::vector<PointType, Eigen::aligned_allocator<PointType>>  PointVector;
 typedef Eigen::Vector2f V2F;
@@ -20,7 +20,5 @@ typedef Eigen::Matrix3f M3F;
 #define VD(a)    Eigen::Matrix<double, (a), 1>
 #define MF(a,b)  Eigen::Matrix<float, (a), (b)>
 #define VF(a)    Eigen::Matrix<float, (a), 1>
-
-
 
 #endif

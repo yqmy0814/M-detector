@@ -26,8 +26,8 @@
 #include <mutex>
 #include <thread>
 
+#include "eigen_points_types.h"
 #include "m-detector/DynObjFilter.h"
-#include "types.h"
 
 // #include "preprocess.h"
 
@@ -37,19 +37,19 @@ shared_ptr<DynObjFilter> DynObjFilt(new DynObjFilter());
 M3D cur_rot = Eigen::Matrix3d::Identity();
 V3D cur_pos = Eigen::Vector3d::Zero();
 
-int QUAD_LAYER_MAX = 1;
-int occlude_windows = 3;
-int point_index = 0;
-float VER_RESOLUTION_MAX = 0.01;
-float HOR_RESOLUTION_MAX = 0.01;
-float angle_noise = 0.001;
-float angle_occlude = 0.02;
-float dyn_windows_dur = 0.5;
-bool dyn_filter_en = true, dyn_filter_dbg_en = true;
+// int QUAD_LAYER_MAX = 1;
+// int occlude_windows = 3;
+// int point_index = 0;
+// float VER_RESOLUTION_MAX = 0.01;
+// float HOR_RESOLUTION_MAX = 0.01;
+// float angle_noise = 0.001;
+// float angle_occlude = 0.02;
+// float dyn_windows_dur = 0.5;
+// bool dyn_filter_en = true, dyn_filter_dbg_en = true;
+// int dataset = 0;
 string points_topic, odom_topic;
 string out_folder, out_folder_origin;
 double lidar_end_time = 0;
-int dataset = 0;
 int cur_frame = 0;
 
 deque<M3D> buffer_rots;
@@ -76,6 +76,7 @@ void OdomCallback(const nav_msgs::Odometry& cur_odom) {
 void PointsCallback(const sensor_msgs::PointCloud2ConstPtr& msg_in) {
   boost::shared_ptr<PointCloudXYZI> feats_undistort(new PointCloudXYZI());
   pcl::fromROSMsg(*msg_in, *feats_undistort);
+  // pcl::fromROSMsg(*msg_in, *feats_undistort);
   buffer_pcs.push_back(feats_undistort);
 }
 

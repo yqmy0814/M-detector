@@ -11,7 +11,7 @@
 // #include <so3_math.h>
 #include <ros/ros.h>
 #include <Eigen/Core>
-#include <types.h>
+#include "eigen_points_types.h"
 #include <m-detector/DynObjFilter.h>
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
@@ -33,7 +33,7 @@
 
 using namespace std;
 
-pcl::PointCloud<pcl::PointXYZINormal> lastcloud;
+pcl::PointCloud<pcl::PointXYZI> lastcloud;
 PointCloudXYZI::Ptr last_pc(new PointCloudXYZI());
 ros::Publisher pub_pointcloud, pub_marker, pub_iou_view, pub_static, pub_dynamic;
 ros::Publisher pub_tp, pub_fp, pub_fn, pub_tn;

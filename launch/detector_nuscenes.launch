@@ -8,7 +8,6 @@
 	<arg name="pose_log" default="false"/>
 	<arg name="pose_log_file" default=""/>
 	<arg name="cluster_out_file" default=""/>
-	<arg name="time_breakdown_file" default=""/>
 
 	<rosparam command="load" file="$(find m_detector)/config/nuscenes/nuscenes0.yaml" />
 	<param name="dyn_obj/out_file" type="string" value="$(arg out_path)" />
@@ -17,7 +16,6 @@
 	<param name="dyn_obj/pose_log" type="bool" value="$(arg pose_log)" />
 	<param name="dyn_obj/pose_log_file" type="string" value="$(arg pose_log_file)" />
 	<param name="dyn_obj/cluster_out_file" type="string" value="$(arg cluster_out_file)" />
-	<param name="dyn_obj/time_breakdown_file" type="string" value="$(arg time_breakdown_file)" />
 
 	<node pkg="m_detector" type="dynfilter" name="dynfilter" output="screen" />
 	<group if="$(arg rviz)">

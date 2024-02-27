@@ -96,8 +96,8 @@ depth_map_dur: 0.2
 max_depth_map_num: 5
 max_pixel_points: 5
 frame_dur: 0.1
-hor_resolution_max: 0.005
-ver_resolution_max: 0.01
+horizontal_resolution: 0.005
+vertical_resolution: 0.01
 ```
 
 The parameters are provided in folder "config" for different LiDARs.
