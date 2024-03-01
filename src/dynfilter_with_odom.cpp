@@ -27,7 +27,7 @@
 #include <thread>
 
 #include "eigen_points_types.h"
-#include "m-detector/DynObjFilter.h"
+#include "m-detector/dynamic_object_filter.h"
 
 // #include "preprocess.h"
 

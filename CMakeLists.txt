@@ -114,7 +114,7 @@ catkin_package(
 )
 
 
-add_executable(dynfilter src/dynfilter_with_odom.cpp src/DynObjFilter.cpp src/DynObjCluster.cpp)
+add_executable(dynfilter src/dynfilter_with_odom.cpp src/dynamic_object_filter.cpp src/dynamic_object_cluster.cpp)
 target_link_libraries(dynfilter ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${PYTHON_LIBRARIES} ${OpenCV_LIBS} TBB::tbb)
 target_include_directories(dynfilter PRIVATE ${PYTHON_INCLUDE_DIRS})
 

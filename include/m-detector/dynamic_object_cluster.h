@@ -63,7 +63,9 @@ class DynObjCluster {
   int max_cluster_size = 25000;
   int cluster_extend_pixel = 2;
   int cluster_min_pixel_number = 4;
-  float Voxel_revolusion = 0.3f;
+  float voxel_revolusion = 0.3f;
+  float map_range_xy = 40;
+  float map_range_z = 40;
   int time_ind = 0;
   double time_total = 0.0, time_total_average = 0.0;
   ros::Time cluster_begin;

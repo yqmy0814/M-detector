@@ -12,7 +12,7 @@
 #include <ros/ros.h>
 #include <Eigen/Core>
 #include "eigen_points_types.h"
-#include <m-detector/DynObjFilter.h>
+#include "m-detector/dynamic_object_cluster.h"
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
 #include <visualization_msgs/Marker.h>

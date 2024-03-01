@@ -19,7 +19,7 @@
 #include <mutex>
 #include <string>
 
-#include "m-detector/DynObjCluster.h"
+#include "m-detector/dynamic_object_cluster.h"
 #include "m-detector/depth_map.h"
 #include "parallel_q.h"
 
@@ -49,7 +49,6 @@ class DynObjFilter {
                            const V3D &transl, point_soph &p_spherical);
   bool Case1(point_soph &p);
   bool Case1Enter(const point_soph &p, const DepthMap &map_info);
-  bool Case1FalseRejection(point_soph &p, const DepthMap &map_info);
   bool Case1MapConsistencyCheck(point_soph &p, const DepthMap &map_info,
                                 bool interp);
   float DepthInterpolationStatic(point_soph &p, int map_index,
@@ -270,9 +269,9 @@ class DynObjFilter {
   std::ofstream time_out_;
   // 是否设置日志路径
   bool is_set_path = false;
-  // 日志文件名
+  // 聚类后日志文件名
   std::string out_file_;
-  // 日志路径
+  // 聚类前日志文件名
   std::string out_file_origin_;
 };
 

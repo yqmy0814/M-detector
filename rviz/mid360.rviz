@@ -35,7 +35,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: surround
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -189,10 +189,10 @@ Visualization Manager:
             Shaft Length: 0.05000000074505806
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /aft_mapped_to_init
+          Topic: /localization_odom
           Unreliable: false
           Value: true
-      Enabled: false
+      Enabled: true
       Name: Odometry
     - Alpha: 1
       Autocompute Intensity Bounds: true
@@ -278,25 +278,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 20
+      Distance: 23.54593849182129
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 3.0131301879882812
+        Y: 1.730157732963562
+        Z: 0.12263625115156174
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
       Pitch: 1.5697963237762451
-      Target Frame: <Fixed Frame>
+      Target Frame: base_link
       Value: Orbit (rviz)
-      Yaw: 3.1365926265716553
+      Yaw: 3.316596269607544
     Saved: ~
 Window Geometry:
   Displays:

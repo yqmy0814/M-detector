@@ -1,4 +1,4 @@
-#include "m-detector/DynObjCluster.h"
+#include "m-detector/dynamic_object_cluster.h"
 #include <algorithm>
 #include <chrono>
 #include <execution>
@@ -10,13 +10,13 @@ void DynObjCluster::Init() {
   // pub_pcl_dyn_extend = pub_pcl_dyn_extend_in;
   // cluster_vis_high = cluster_vis_high_in;
   // pub_ground_points = pub_ground_points_in;
-  maprange << 40.0, 40.0, 40.0;
+  maprange << map_range_xy, map_range_xy, map_range_z;
   xyz_origin = -0.5 * maprange;
-    // xyz_origin << -20., -20., -20.;
+  // xyz_origin << -20., -20., -20.;
   // xyz_origin << -100., -100., -20.;
   // maprange << 200., 200., 40.;
-  GridMapedgesize_xy = ceil(maprange(0) / Voxel_revolusion);
-  GridMapedgesize_z = ceil(maprange(2) / Voxel_revolusion);
+  GridMapedgesize_xy = ceil(maprange(0) / voxel_revolusion);
+  GridMapedgesize_z = ceil(maprange(2) / voxel_revolusion);
   GridMapsize = GridMapedgesize_xy * GridMapedgesize_xy * GridMapedgesize_z;
   std::cout << "clustering init begin, please wait------------" << GridMapsize
             << std::endl;
@@ -83,8 +83,7 @@ void DynObjCluster::GetClusterResult(
   if (points_in->size() < 2) {
     return;
   }
-  pcl::search::KdTree<PointType>::Ptr tree(
-      new pcl::search::KdTree<PointType>);
+  pcl::search::KdTree<PointType>::Ptr tree(new pcl::search::KdTree<PointType>);
   tree->setInputCloud(points_in);
   DBSCANKdtreeCluster<PointType> ec;
   ec.setCorePointMinPts(nn_points_size);
@@ -109,7 +108,7 @@ void DynObjCluster::GetClusterResult_voxel(
   }
   VOXEL_CLUSTER cluster;
   cluster.setInputCloud(*points_in);
-  cluster.setVoxelResolution(Voxel_revolusion, GridMapedgesize_xy,
+  cluster.setVoxelResolution(voxel_revolusion, GridMapedgesize_xy,
                              GridMapedgesize_z, xyz_origin);
   cluster.setExtendRange(cluster_extend_pixel);
   cluster.setMinClusterSize(cluster_min_pixel_number);
@@ -152,23 +151,23 @@ void DynObjCluster::PubClusterResult_voxel(
       if (xyz(0) < x_min) x_min = xyz(0);
       if (xyz(1) < y_min) y_min = xyz(1);
       if (xyz(2) < z_min) z_min = xyz(2);
-      if ((xyz(0) + Voxel_revolusion) > x_max)
-        x_max = xyz(0) + Voxel_revolusion;
-      if ((xyz(1) + Voxel_revolusion) > y_max)
-        y_max = xyz(1) + Voxel_revolusion;
-      if ((xyz(2) + Voxel_revolusion) > z_max)
-        z_max = xyz(2) + Voxel_revolusion;
+      if ((xyz(0) + voxel_revolusion) > x_max)
+        x_max = xyz(0) + voxel_revolusion;
+      if ((xyz(1) + voxel_revolusion) > y_max)
+        y_max = xyz(1) + voxel_revolusion;
+      if ((xyz(2) + voxel_revolusion) > z_max)
+        z_max = xyz(2) + voxel_revolusion;
     }
     float x_size = x_max - x_min;
     float y_size = y_max - y_min;
     float z_size = z_max - z_min;
     if (cluster_min_pixel_number == 1 ||
-        (x_size > Voxel_revolusion + 0.001f &&
-         y_size > Voxel_revolusion + 0.001f) ||
-        (x_size > Voxel_revolusion + 0.001f &&
-         z_size > Voxel_revolusion + 0.001f) ||
-        (y_size > Voxel_revolusion + 0.001f &&
-         z_size > Voxel_revolusion + 0.001f)) {
+        (x_size > voxel_revolusion + 0.001f &&
+         y_size > voxel_revolusion + 0.001f) ||
+        (x_size > voxel_revolusion + 0.001f &&
+         z_size > voxel_revolusion + 0.001f) ||
+        (y_size > voxel_revolusion + 0.001f &&
+         z_size > voxel_revolusion + 0.001f)) {
       pcl::PointCloud<PointType> clus_pcl;
       bbox.Point_cloud.push_back(clus_pcl);
       std::vector<int> new_point_indices;
@@ -236,15 +235,15 @@ void DynObjCluster::PubClusterResult_voxel(
         min.x = bbox.Center[bbox_i].pose.covariance[3 * 6 + 2];
         min.y = bbox.Center[bbox_i].pose.covariance[4 * 6 + 3];
         min.z = bbox.Center[bbox_i].pose.covariance[5 * 6 + 4];
-        int n_x = std::max(1.0f, 1.0f * x_size) / Voxel_revolusion;
-        int n_y = std::max(1.0f, 1.0f * y_size) / Voxel_revolusion;
-        int n_z = std::max(1.0f, 1.0f * z_size) / Voxel_revolusion;
+        int n_x = std::max(1.0f, 1.0f * x_size) / voxel_revolusion;
+        int n_y = std::max(1.0f, 1.0f * y_size) / voxel_revolusion;
+        int n_z = std::max(1.0f, 1.0f * z_size) / voxel_revolusion;
         int voxel_center =
-            floor((center.x - xyz_origin(0)) / Voxel_revolusion) *
+            floor((center.x - xyz_origin(0)) / voxel_revolusion) *
                 GridMapedgesize_xy * GridMapedgesize_z +
-            floor((center.y - xyz_origin(1)) / Voxel_revolusion) *
+            floor((center.y - xyz_origin(1)) / voxel_revolusion) *
                 GridMapedgesize_z +
-            floor((center.z - xyz_origin(2)) / Voxel_revolusion);
+            floor((center.z - xyz_origin(2)) / voxel_revolusion);
         int ii = 0;
         Eigen::Vector3f xyz;
         for (int i = 0; i <= 2 * n_x + 1; i++) {
@@ -260,9 +259,9 @@ void DynObjCluster::PubClusterResult_voxel(
                           jj * GridMapedgesize_z + kk;
               if (voxel < 0 || voxel > GridMapsize) continue;
               XYZExtract(voxel, xyz);
-              Eigen::Vector3f voxel_loc(xyz(0) + 0.5f * Voxel_revolusion,
-                                        xyz(1) + 0.5f * Voxel_revolusion,
-                                        xyz(2) + 0.5f * Voxel_revolusion);
+              Eigen::Vector3f voxel_loc(xyz(0) + 0.5f * voxel_revolusion,
+                                        xyz(1) + 0.5f * voxel_revolusion,
+                                        xyz(2) + 0.5f * voxel_revolusion);
               if (umap[voxel].points_num == 0 &&
                   !((voxel_loc(0) > min.x && voxel_loc(0) < max.x) &&
                     (voxel_loc(1) > min.y && voxel_loc(1) < max.y) &&
@@ -290,11 +289,11 @@ void DynObjCluster::PubClusterResult_voxel(
   ros::Time t2 = ros::Time::now();
   for (int ite = 0; ite < raw_point.size(); ite++) {
     if (dyn_tag[ite] == -1) continue;
-    int voxel = floor((raw_point[ite].x - xyz_origin(0)) / Voxel_revolusion) *
+    int voxel = floor((raw_point[ite].x - xyz_origin(0)) / voxel_revolusion) *
                     GridMapedgesize_xy * GridMapedgesize_z +
-                floor((raw_point[ite].y - xyz_origin(1)) / Voxel_revolusion) *
+                floor((raw_point[ite].y - xyz_origin(1)) / voxel_revolusion) *
                     GridMapedgesize_z +
-                floor((raw_point[ite].z - xyz_origin(2)) / Voxel_revolusion);
+                floor((raw_point[ite].z - xyz_origin(2)) / voxel_revolusion);
     if (voxel < 0 || voxel > GridMapsize) {
       continue;
     }
@@ -475,11 +474,11 @@ bool DynObjCluster::ground_estimate(
       if (dis < thershold) {
         true_ground.push_back(ground_pcl[j]);
         int voxel =
-            floor((ground_pcl[j].x - xyz_origin(0)) / Voxel_revolusion) *
+            floor((ground_pcl[j].x - xyz_origin(0)) / voxel_revolusion) *
                 GridMapedgesize_xy * GridMapedgesize_z +
-            floor((ground_pcl[j].y - xyz_origin(1)) / Voxel_revolusion) *
+            floor((ground_pcl[j].y - xyz_origin(1)) / voxel_revolusion) *
                 GridMapedgesize_z +
-            floor((ground_pcl[j].z - xyz_origin(2)) / Voxel_revolusion);
+            floor((ground_pcl[j].z - xyz_origin(2)) / voxel_revolusion);
         extend_pixels.erase(voxel);
       }
     }
@@ -532,7 +531,7 @@ void DynObjCluster::isolate_remove(pcl::PointCloud<PointType> &cluster_pcl,
   std::unordered_map<int, Point_Cloud::Ptr> umap_cluster;
   std::vector<std::vector<int>> voxel_cluster;
   cluster.setInputCloud(cluster_pcl);
-  cluster.setVoxelResolution(Voxel_revolusion, GridMapedgesize_xy,
+  cluster.setVoxelResolution(voxel_revolusion, GridMapedgesize_xy,
                              GridMapedgesize_z, xyz_origin);
   cluster.setExtendRange(cluster_extend_pixel);
   cluster.setMinClusterSize(cluster_min_pixel_number);
@@ -766,12 +765,12 @@ void DynObjCluster::XYZExtract(const int &position, Eigen::Vector3f &xyz) {
   int left = position;
   xyz(0) = xyz_origin(0) +
            (float)floor(position / (GridMapedgesize_xy * GridMapedgesize_z)) *
-               Voxel_revolusion;
+               voxel_revolusion;
   left =
       left - (float)floor(position / (GridMapedgesize_xy * GridMapedgesize_z)) *
                  (GridMapedgesize_xy * GridMapedgesize_z);
   xyz(1) =
-      xyz_origin(1) + (float)floor(left / GridMapedgesize_z) * Voxel_revolusion;
+      xyz_origin(1) + (float)floor(left / GridMapedgesize_z) * voxel_revolusion;
   left = left - (float)floor(left / GridMapedgesize_z) * GridMapedgesize_z;
-  xyz(2) = xyz_origin(2) + left * Voxel_revolusion;
+  xyz(2) = xyz_origin(2) + left * voxel_revolusion;
 }

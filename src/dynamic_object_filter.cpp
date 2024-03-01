@@ -5,7 +5,7 @@
 // #include <chrono>
 // #include <execution>
 
-#include "m-detector/DynObjFilter.h"
+#include "m-detector/dynamic_object_filter.h"
 
 #define PI_MATH (3.14159f)
 
@@ -136,10 +136,14 @@ void DynObjFilter::init(ros::NodeHandle &nh) {
                 cluster_.cluster_min_pixel_number, 4);
   nh.param<float>("dyn_obj/cluster_thrustable_thresold",
                   cluster_.thrustable_thresold, 0.3f);
-  nh.param<float>("dyn_obj/cluster_Voxel_revolusion", cluster_.Voxel_revolusion,
+  nh.param<float>("dyn_obj/cluster_Voxel_revolusion", cluster_.voxel_revolusion,
                   0.3f);
   nh.param<bool>("dyn_obj/cluster_debug_en", cluster_.debug_on, false);
   nh.param<std::string>("dyn_obj/cluster_out_file", cluster_.out_file, "");
+  nh.param<float>("dyn_obj/cluster_cluster_map_range_xy", cluster_.map_range_xy,
+                  40);
+  nh.param<float>("dyn_obj/cluster_cluster_map_range_z", cluster_.map_range_z,
+                  40);
 
   if (history_pointcloud_list_.size() == 0) {
     PointCloudXYZI::Ptr first_frame(new PointCloudXYZI());
@@ -742,7 +746,7 @@ bool DynObjFilter::Case1(point_soph &p) {
       continue;
     }
     if (Case1Enter(p, *depth_map_list_[i])) {
-      if (Case1FalseRejection(p, *depth_map_list_[i])) {
+      if (Case1MapConsistencyCheck(p, *depth_map_list_[i], case1_interp_on_)) {
         occluded_map -= 1;
       }
     } else {
@@ -786,11 +790,6 @@ bool DynObjFilter::Case1Enter(const point_soph &p, const DepthMap &map_info) {
     return true;
   }
   return false;
-}
-
-bool DynObjFilter::Case1FalseRejection(point_soph &p,
-                                       const DepthMap &map_info) {
-  return Case1MapConsistencyCheck(p, map_info, case1_interp_on_);
 }
 
 bool DynObjFilter::Case1MapConsistencyCheck(point_soph &p,

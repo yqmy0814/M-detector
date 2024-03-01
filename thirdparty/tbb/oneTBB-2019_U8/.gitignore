@@ -85,4 +85,4 @@ CMakeFiles/
 .svn
 crash*
 *.tmp
-thirdparty
+*.cmake

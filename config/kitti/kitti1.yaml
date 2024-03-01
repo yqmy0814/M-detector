@@ -2,7 +2,7 @@ dyn_obj:
     points_topic: "/cloud_registered_body"
     odom_topic: "/aft_mapped_to_init"
     frame_id: "camera_init"
-    pc_topic: "/velodyne_points"
+    # pc_topic: "/velodyne_points"
 
     dataset: 0 #0 for kitti, 1 for nuscenes, 2 for waymo, 3 for avia
     use_odom_file: true
