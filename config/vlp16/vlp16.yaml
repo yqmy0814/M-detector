@@ -1,0 +1,87 @@
+dyn_obj:
+    points_topic: "/laser_point_cloud"
+    odom_topic: "/localization_odom"
+    frame_id: "map"
+    # pc_topic: "/livox/lidar"
+
+    dataset: 4 #0 for kitti, 1 for nuscenes, 2 for waymo
+    map_buffer_delay: 0.1
+    buffer_size: 100000
+    points_num_perframe: 30000
+    depth_map_duration: 0.4
+    max_depth_map_num: 5
+    max_pixel_points: 20
+    lidar_scan_period: 0.02
+    self_x_front: 0
+    self_x_back: 0
+    self_y_left: 0
+    self_y_right: 0
+    lidar_blind_distance: 0.3
+    lidar_fov_up: 52
+    lidar_fov_down: -7
+    lidar_fov_left: 180.0
+    lidar_fov_right: -180.0
+    vertical_resolution: 0.05
+    horizontal_resolution: 0.05
+
+    case1_enter_threshold_min: 0.5
+    case1_enter_threshold_max: 0.5 ##10.3
+    case1_depth_consistency_threshold: 0.5
+    case1_hor_consistency_threshold: 0.05
+    case1_ver_consistency_threshold: 0.05
+    case1_hor_consist_factor: 0.3
+    case1_ver_consist_factor: 0.6
+    case1_success_threshold: 3
+    case1_interp_on: false
+
+    case2_velocity_threshold: 0.1
+    case2_acc_threshold: 7.0
+    case2_depth_consistency_threshold: 0.3
+    case2_hor_consistency_threshold: 0.02
+    case2_ver_consistency_threshold: 0.06
+    case2_depth_occlusion_threshold: 0.3
+    case2_hor_occlusion_threshold: 0.01 ##0.01
+    case2_ver_occlusion_threshold: 0.015 ##0.015
+    case2_depth_depth_consistency_threshold: 0.1
+    case2_depth_depth_consist_threshold_max: 0.5
+    case2_hor_depth_consist_threshold: 0.03
+    case2_ver_depth_consist_threshold: 0.06
+    case2_occluded_times_threshold: 3
+    case2_k_depth: 0.005
+    case2_interp_on: false
+
+    case3_velocity_threshold: 0.1
+    case3_acc_threshold: 15.0
+    case3_depth_consistency_threshold: 0.1
+    case3_hor_consistency_threshold: 0.03
+    case3_ver_consistency_threshold: 0.03
+    case3_depth_occlusion_threshold: 0.15
+    case3_hor_occlusion_threshold: 0.01
+    case3_ver_occlusion_threshold: 0.015
+    case3_depth_depth_consistency_threshold: 0.3
+    case3_depth_depth_consistency_threshold_max: 1.0
+    case3_hor_depth_consistency_threshold: 0.03
+    case3_ver_depth_consistency_threshold: 0.03
+    occluded_times_thr3: 3
+    case3_interp_on: false
+
+    interp_hor_threshold: 0.03
+    interp_ver_threshold: 0.03
+    case1_interp_threshold: 0.5
+    case1_interp_start_depth: 10
+    interp_kp: 0.1
+    interp_kd: 0.5
+    case2_interp_threshold: 0.25
+    case3_interp_threshold: 0.05
+
+    cluster_coupled: true
+    cluster_future: true
+    cluster_extend_pixel: 3
+    cluster_min_pixel_number: 1
+    cluster_thrustable_thresold: 0.1
+    cluster_Voxel_revolusion: 0.2
+    cluster_map_range_xy : 40.0
+    cluster_map_range_z : 20.0
+
+    lidar_base_transform: [-0.08,0,0.421]
+    lidar_base_rotation: [0,0,0]

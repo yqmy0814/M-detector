@@ -2,9 +2,6 @@
 #define BBOX_H
 
 #include <Eigen/Core>
-#include <Eigen/Geometry>
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
 #include <visualization_msgs/Marker.h>
 
 struct bbox_s

@@ -1,8 +1,7 @@
 #ifndef DBSCAN_KDTREE_H
 #define DBSCAN_KDTREE_H
 
-#include <pcl/point_types.h>
-#include <cluster_predict/dbscan.h>
+#include "cluster_predict/dbscan.h"
 
 template <typename PointT>
 class DBSCANKdtreeCluster: public DBSCANSimpleCluster<PointT> {
