@@ -16,29 +16,26 @@
 #define MAP_NUM 17    // 30
 #define HASH_PRIM 19  // 37
 
-enum dyn_obj_flg { STATIC, CASE1, CASE2, CASE3, SELF, UNCERTAIN, INVALID };
+enum Status { STATIC, CASE1, CASE2, CASE3, SELF, UNCERTAIN, INVALID };
 
 struct point_soph {
-  int hor_ind;
-  V3F vec;
-  int ver_ind;
-  int position;
-  int occu_times;
-  int is_occu_times;
-  Eigen::Vector3i occu_index;
-  Eigen::Vector3i is_occu_index;
+  V3F vec;       //球面系坐标(水平角，垂直角，深度)
+  int hor_ind;   // 水平像素位置
+  int ver_ind;   // 垂直像素位置
+  int position;  //投影至一维后的像素索引
+  Eigen::Vector3i occu_index;  // 遮挡的点的信息（地图索引，像素索引，点索引）
+  Eigen::Vector3i
+      is_occu_index;  // 被遮挡的点的信息（地图索引，像素索引，点索引）
   double time;
-  V3F occ_vec;
-  V3F is_occ_vec;
-  M3D rot;
-  V3D trans;
-  dyn_obj_flg status;
-  V3D global;
-  V3D local;
-  V3F cur_vec;
+  V3F occ_vec;     //遮挡点球面坐标
+  V3F is_occ_vec;  //被遮挡点球面坐标
+  M3D rot;         //点云姿态角
+  V3D trans;       //点云位置
+  Status status;
+  V3D global;  // 全局坐标系下三维坐标
+  V3D local;   //激光雷达系下三维坐标
   float intensity;
   bool is_distort;
-  V3D last_closest;
   std::array<float, MAP_NUM> last_depth_interps = {};
   std::array<V3F, HASH_PRIM> last_vecs = {};
   std::array<Eigen::Vector3i, HASH_PRIM> last_positions = {};
@@ -54,7 +51,6 @@ struct point_soph {
     ver_ind = floor((vec(1) + 0.5 * PI_MATH) / vertical_resolution);
     position = hor_ind * MAX_1D_HALF + ver_ind;
     time = -1;
-    occu_times = is_occu_times = 0;
     occu_index = -1 * Eigen::Vector3i::Ones();
     is_occu_index = -1 * Eigen::Vector3i::Ones();
     occ_vec.setZero();
@@ -66,13 +62,12 @@ struct point_soph {
     last_vecs.fill(V3F::Zero());
     last_positions.fill(Eigen::Vector3i::Zero());
     is_distort = false;
-    cur_vec.setZero();
     local.setZero();
-    last_closest.setZero();
   };
+
   point_soph() {
     vec.setZero();
-    hor_ind = ver_ind = position = occu_times = is_occu_times = 0;
+    hor_ind = ver_ind = position = 0;
     time = -1;
     occu_index = -1 * Eigen::Vector3i::Ones();
     is_occu_index = -1 * Eigen::Vector3i::Ones();
@@ -85,16 +80,14 @@ struct point_soph {
     last_vecs.fill(V3F::Zero());
     last_positions.fill(Eigen::Vector3i::Zero());
     is_distort = false;
-    cur_vec.setZero();
     local.setZero();
-    last_closest.setZero();
   };
+
   point_soph(V3F s, int ind1, int ind2, int pos) {
     vec = s;
     hor_ind = ind1;
     ver_ind = ind2;
     position = pos;
-    occu_times = is_occu_times = 0;
     time = -1;
     occu_index = -1 * Eigen::Vector3i::Ones();
     is_occu_index = -1 * Eigen::Vector3i::Ones();
@@ -107,18 +100,15 @@ struct point_soph {
     last_vecs.fill(V3F::Zero());
     last_positions.fill(Eigen::Vector3i::Zero());
     is_distort = false;
-    cur_vec.setZero();
     local.setZero();
-    last_closest.setZero();
   };
+
   point_soph(const point_soph &cur) {
     vec = cur.vec;
     hor_ind = cur.hor_ind;
     ver_ind = cur.ver_ind;
     position = cur.position;
     time = cur.time;
-    occu_times = cur.occu_times;
-    is_occu_times = cur.is_occu_times;
     occu_index = cur.occu_index;
     is_occu_index = cur.is_occu_index;
     occ_vec = cur.occ_vec;
@@ -132,8 +122,6 @@ struct point_soph {
     last_positions = cur.last_positions;
     local = cur.local;
     is_distort = cur.is_distort;
-    cur_vec = cur.cur_vec;
-    last_closest = cur.last_closest;
   };
 
   ~point_soph(){};
@@ -150,12 +138,10 @@ struct point_soph {
   };
 
   void reset() {
-    occu_times = is_occu_times = 0;
     occu_index = -1 * Eigen::Vector3i::Ones();
     is_occu_index = -1 * Eigen::Vector3i::Ones();
     occ_vec.setZero();
     is_occ_vec.setZero();
-    last_closest.setZero();
     last_depth_interps.fill(0.0);
     last_vecs.fill(V3F::Zero());
     last_positions.fill(Eigen::Vector3i::Zero());
@@ -278,7 +264,6 @@ class DepthMap {
     project_R = rot;
     project_T = transl;
     map_index = frame;
-    double t = omp_get_wtime();
     std::for_each(std::execution::par, index_vector.begin(), index_vector.end(),
                   [&](const int &i) { depth_map[i].clear(); });
     std::fill_n(min_depth_static, MAX_2D_N, 0.0);

@@ -1,26 +1,11 @@
 #ifndef DYN_OBJ_FLT_H
 #define DYN_OBJ_FLT_H
 
-#include <math.h>
-#include <nav_msgs/Odometry.h>
-#include <nav_msgs/Path.h>
-#include <omp.h>
-#include <pcl/filters/voxel_grid.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-#include <pcl_conversions/pcl_conversions.h>
-#include <ros/ros.h>
-#include <sensor_msgs/CompressedImage.h>
-#include <sensor_msgs/PointCloud2.h>
-#include <Eigen/Core>
-#include <algorithm>
 #include <execution>
-#include <mutex>
-#include <string>
+#include <omp.h>
 
-#include "m-detector/dynamic_object_cluster.h"
 #include "m-detector/depth_map.h"
+#include "m-detector/dynamic_object_cluster.h"
 #include "parallel_q.h"
 
 class DynObjFilter {
@@ -65,7 +50,7 @@ class DynObjFilter {
   bool Case2IsOccluded(const point_soph &p, const point_soph &p_occ);
   bool Case2VelCheck(float v1, float v2, double delta_t);
   bool InvalidPointCheck(const V3D &body, const int intensity);
-  bool SelfPointCheck(const V3D &body, const dyn_obj_flg dyn);
+  bool SelfPointCheck(const V3D &body, const Status dyn);
   bool Case3(point_soph &p);
   bool Case3Enter(point_soph &p, const DepthMap &map_info);
   bool Case3MapConsistencyCheck(point_soph &p, const DepthMap &map_info,
@@ -79,7 +64,7 @@ class DynObjFilter {
   void SearchNeighborPixel(const point_soph &p, const DepthMap &map_info,
                            float &max_depth, float &min_depth);
 
-  //外部参数
+  //参数
   // 数据集编号
   int dataset_ = 0;
   // 深度图像像素尺寸

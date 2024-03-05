@@ -1,20 +1,10 @@
 #include "m-detector/dynamic_object_cluster.h"
-#include <algorithm>
-#include <chrono>
 #include <execution>
 #include "cluster_predict/EA_disk.h"
 
-// void DynObjCluster::Init(ros::Publisher &pub_pcl_dyn_extend_in,
-// ros::Publisher &cluster_vis_high_in, ros::Publisher &pub_ground_points_in)
 void DynObjCluster::Init() {
-  // pub_pcl_dyn_extend = pub_pcl_dyn_extend_in;
-  // cluster_vis_high = cluster_vis_high_in;
-  // pub_ground_points = pub_ground_points_in;
   maprange << map_range_xy, map_range_xy, map_range_z;
   xyz_origin = -0.5 * maprange;
-  // xyz_origin << -20., -20., -20.;
-  // xyz_origin << -100., -100., -20.;
-  // maprange << 200., 200., 40.;
   GridMapedgesize_xy = ceil(maprange(0) / voxel_revolusion);
   GridMapedgesize_z = ceil(maprange(2) / voxel_revolusion);
   GridMapsize = GridMapedgesize_xy * GridMapedgesize_xy * GridMapedgesize_z;

@@ -36,10 +36,10 @@ dyn_obj:
 
     case2_velocity_threshold: 0.1
     case2_acc_threshold: 7.0
-    case2_depth_consistency_threshold: 0.01
+    case2_depth_consistency_threshold: 0.3
     case2_hor_consistency_threshold: 0.02
     case2_ver_consistency_threshold: 0.06
-    case2_depth_occlusion_threshold: 0.05
+    case2_depth_occlusion_threshold: 0.3
     case2_hor_occlusion_threshold: 0.01 ##0.01
     case2_ver_occlusion_threshold: 0.015 ##0.015
     case2_depth_depth_consistency_threshold: 0.1
@@ -52,10 +52,10 @@ dyn_obj:
 
     case3_velocity_threshold: 0.1
     case3_acc_threshold: 15.0
-    case3_depth_consistency_threshold: 0.01
+    case3_depth_consistency_threshold: 0.1
     case3_hor_consistency_threshold: 0.03
     case3_ver_consistency_threshold: 0.03
-    case3_depth_occlusion_threshold: 0.05
+    case3_depth_occlusion_threshold: 0.15
     case3_hor_occlusion_threshold: 0.01
     case3_ver_occlusion_threshold: 0.015
     case3_depth_depth_consistency_threshold: 0.3
@@ -83,5 +83,5 @@ dyn_obj:
     cluster_map_range_xy : 40.0
     cluster_map_range_z : 20.0
 
-    lidar_base_transform: [-0.011,-0.02329,0.04412]
-    lidar_base_rotation: [0,0,0]
+    lidar_base_transform: [0.3325,0,0.6316]
+    lidar_base_rotation: [0,0,1.57]

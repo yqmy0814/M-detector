@@ -2,22 +2,13 @@
 #define DYN_OBJ_CLUS_H
 
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
-#include <nav_msgs/Odometry.h>
-#include <pcl/filters/passthrough.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
-#include <std_msgs/Header.h>
 #include <tf/transform_listener.h>
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
-#include <Eigen/Core>
-#include <Eigen/Dense>
-#include <Eigen/Eigenvalues>
-#include <Eigen/Geometry>
-#include <Eigen/Sparse>
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>

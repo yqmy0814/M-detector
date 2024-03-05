@@ -2,9 +2,6 @@
 #define EA_DISK_H
 
 #include <Eigen/Core>
-#include <Eigen/Geometry>
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
 
 #define PI 3.141593
 

@@ -1,13 +1,4 @@
-#include <iostream>
-#include <random>
-#include <vector>
-// #include <algorithm>
-// #include <chrono>
-// #include <execution>
-
 #include "m-detector/dynamic_object_filter.h"
-
-#define PI_MATH (3.14159f)
 
 void DynObjFilter::init(ros::NodeHandle &nh) {
   nh.param<double>("dyn_obj/map_buffer_delay", map_buffer_delay_, 0.1);
@@ -360,8 +351,6 @@ void DynObjFilter::filter(PointCloudXYZI::Ptr feats_undistort,
         case CASE1:
           if (status_tag_cluster_[i] == 0) {
             points[i]->status = STATIC;
-            points[i]->occu_times = -1;
-            points[i]->is_occu_times = -1;
             po.intensity = (int)(points[i]->local.norm() * 10) + 10;
             static_point_cloud_cluster_->push_back(po);
             num_neag += 1;
@@ -377,8 +366,6 @@ void DynObjFilter::filter(PointCloudXYZI::Ptr feats_undistort,
         case CASE2:
           if (status_tag_cluster_[i] == 0) {
             points[i]->status = STATIC;
-            points[i]->occu_times = -1;
-            points[i]->is_occu_times = -1;
             po.intensity = (int)(points[i]->local.norm() * 10) + 10;
             static_point_cloud_cluster_->push_back(po);
             num_neag += 1;
@@ -393,8 +380,6 @@ void DynObjFilter::filter(PointCloudXYZI::Ptr feats_undistort,
         case CASE3:
           if (status_tag_cluster_[i] == 0) {
             points[i]->status = STATIC;
-            points[i]->occu_times = -1;
-            points[i]->is_occu_times = -1;
             po.intensity = (int)(points[i]->local.norm() * 10) + 10;
             static_point_cloud_cluster_->push_back(po);
             num_neag += 1;
@@ -409,8 +394,6 @@ void DynObjFilter::filter(PointCloudXYZI::Ptr feats_undistort,
         case STATIC:
           if (status_tag_cluster_[i] == 1) {
             points[i]->status = CASE1;
-            points[i]->occu_times = -1;
-            points[i]->is_occu_times = -1;
             dynamic_point_cloud_cluster_->push_back(po);
 
             po.intensity = (int)(points[i]->local.norm() * 10) + 10;
@@ -666,7 +649,7 @@ bool DynObjFilter::InvalidPointCheck(const V3D &body, const int intensity) {
   }
 }
 
-bool DynObjFilter::SelfPointCheck(const V3D &body, const dyn_obj_flg dyn) {
+bool DynObjFilter::SelfPointCheck(const V3D &body, const Status dyn) {
   if (dataset_ == 0) {
     if ((body(0) > -1.2 && body(0) < -0.4 && body(1) > -1.7 && body(1) < -1.0 &&
          body(2) > -0.65 && body(2) < -0.4) ||
@@ -1030,7 +1013,6 @@ bool DynObjFilter::Case2(point_soph &p) {
               p.occu_index[1] = pos_new;
               p.occu_index[2] = k;
               p.occ_vec = p_spherical.vec;
-              p.occu_times = cur_occ_times;
               point_soph p0 = p;
               point_soph p1 = *points_in_pixel[k];
               int i = depth_map_list_.size();
@@ -1069,7 +1051,6 @@ bool DynObjFilter::Case2(point_soph &p) {
                     Case2VelCheck(vi, vc, ti - tc)) {
                   cur_occ_times += 1;
                   if (cur_occ_times >= case2_occluded_times_threshold_) {
-                    p.occu_times = cur_occ_times;
                     return true;
                   }
                   t2 = p2->global;
@@ -1091,7 +1072,6 @@ bool DynObjFilter::Case2(point_soph &p) {
     }
   }
   if (cur_occ_times >= case2_occluded_times_threshold_) {
-    p.occu_times = cur_occ_times;
     return true;
   }
   return false;
@@ -1428,7 +1408,6 @@ bool DynObjFilter::Case3(point_soph &p) {
               p.is_occu_index[1] = pos_new;
               p.is_occu_index[2] = k;
               p.is_occ_vec = p_spherical.vec;
-              p.is_occu_times = cur_occ_times;
               point_soph p0 = p;
               point_soph p1 = *points_in_pixel[k];
               int i = depth_map_list_.size();
@@ -1465,7 +1444,6 @@ bool DynObjFilter::Case3(point_soph &p) {
                     Case3VelCheck(vi, vc, ti - tc)) {
                   cur_occ_times += 1;
                   if (cur_occ_times >= case3_occlusion_times_threshold_) {
-                    p.is_occu_times = cur_occ_times;
                     return true;
                   }
                   p1 = *p2;
@@ -1486,7 +1464,6 @@ bool DynObjFilter::Case3(point_soph &p) {
     }
   }
   if (cur_occ_times >= case3_occlusion_times_threshold_) {
-    p.is_occu_times = cur_occ_times;
     return true;
   }
   return false;
